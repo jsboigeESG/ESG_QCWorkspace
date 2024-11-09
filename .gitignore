@@ -396,3 +396,17 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#QuantConnect
+
+.QuantConnect
+.QuantConnect/*
+
+data
+data/*
+*/live/*
+*/optimizations/*
+*/backtests/*
+lean.json
+.vscode/*
+*/.vscode/*

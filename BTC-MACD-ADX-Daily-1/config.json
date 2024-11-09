@@ -1,0 +1,18 @@
+{
+    "cloud-id": 19898232,
+    "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
+    "channel-id": "LOCAL-9a7ae3e88f2392fc0779e0bd85a005bf",
+    "description": "",
+    "algorithm-language": "CSharp",
+    "parameters": {
+        "macd-fast": "12",
+        "macd-slow": "26",
+        "macd-signal": "9",
+        "adx-period": "25",
+        "adx-high": "20",
+        "adx-low": "15"
+    },
+    "local-id": 782896457,
+    "python-venv": 1,
+    "encrypted": false
+}

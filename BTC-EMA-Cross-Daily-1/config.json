@@ -1,0 +1,13 @@
+{
+    "cloud-id": 19050970,
+    "algorithm-language": "CSharp",
+    "parameters": {
+        "ema-fast": "18",
+        "ema-slow": "23"
+    },
+    "description": "Simple BTC/USDT exponential moving average crossing algorithm with daily resolution",
+    "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
+    "python-venv": 1,
+    "encrypted": false,
+    "local-id": 762195764
+}
