@@ -2,7 +2,7 @@
     "cloud-id": 19898232,
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
     "channel-id": "LOCAL-9a7ae3e88f2392fc0779e0bd85a005bf",
-    "description": "",
+    "description": "Exemple d'un algorithme simple basé sur 2 indicateurs techniques, le MACD et l'ADX",
     "algorithm-language": "CSharp",
     "parameters": {
         "macd-fast": "12",

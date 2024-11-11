@@ -1,0 +1,11 @@
+{
+    "cloud-id": 19865767,
+    "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
+    "channel-id": "LOCAL-17f43d15bcbb77f8cfb126931ec23f88",
+    "description": "En s\u00e9lectionnant les 2 constituants les plus corr\u00e9l\u00e9s de l\u2019ETF du secteur technologique, cette strat\u00e9gie n\u00e9gocie les \u00e9ventuelles erreurs de prix avec le vecteur de coint\u00e9gration.",
+    "algorithm-language": "Python",
+    "parameters": {},
+    "python-venv": 1,
+    "encrypted": false,
+    "local-id": 798541826
+}

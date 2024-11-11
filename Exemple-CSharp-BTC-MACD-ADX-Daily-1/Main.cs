@@ -115,7 +115,7 @@ namespace QuantConnect.Algorithm.CSharp
 
             // Initialisation du capital de départ en USDT
             SetAccountCurrency("USDT");    // Devise du compte
-            SetCash(600000);               // Capital initial de 600 000 USDT
+            SetCash(5000);               // Capital initial de 600 000 USDT
 
 
             // Configuration du modèle de courtage (Binance, compte Cash)
@@ -305,7 +305,8 @@ namespace QuantConnect.Algorithm.CSharp
             // SetEndDate(2024, 01, 29);
 
 
-            SetStartDate(2021, 10, 16); //61672
+            // SetStartDate(2021, 10, 16); //61672
+            SetStartDate(2011, 04, 07); //61672
             SetEndDate(2024, 10, 11); //60326
 
 

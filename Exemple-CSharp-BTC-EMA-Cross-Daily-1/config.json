@@ -5,7 +5,7 @@
         "ema-fast": "18",
         "ema-slow": "23"
     },
-    "description": "Simple BTC/USDT exponential moving average crossing algorithm with daily resolution",
+    "description": "Exemple d'un algorithme très simple tradant la paire BTC/USDT à partir de croisement de moyennes mobiles exponentielles sur une résolution journalière",
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
     "python-venv": 1,
     "encrypted": false,
