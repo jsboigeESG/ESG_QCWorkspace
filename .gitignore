@@ -410,3 +410,7 @@ data/*
 lean.json
 .vscode/*
 */.vscode/*
+*/.idea/*
+*/.Trash-0*
+*/.ipynb_checkpoints*
+

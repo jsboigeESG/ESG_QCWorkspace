@@ -2,7 +2,7 @@
     "cloud-id": 19898232,
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
     "channel-id": "LOCAL-9a7ae3e88f2392fc0779e0bd85a005bf",
-    "description": "Exemple d'un algorithme simple basé sur 2 indicateurs techniques, le MACD et l'ADX",
+    "description": "Exemple d'un algorithme simple bas\u00e9 sur 2 indicateurs techniques, le MACD et l'ADX",
     "algorithm-language": "CSharp",
     "parameters": {
         "macd-fast": "12",
@@ -10,9 +10,83 @@
         "macd-signal": "9",
         "adx-period": "25",
         "adx-high": "20",
-        "adx-low": "15"
+        "adx-low": "15",
+        "adx-window": "140",
+        "adx-lower-percentile": "6",
+        "adx-upper-percentile": "86"
     },
     "local-id": 782896457,
     "python-venv": 1,
-    "encrypted": false
+    "encrypted": false,
+    "deployment-target": "Local Platform",
+    "backtestGrid": {
+        "xl": [
+            {
+                "chartName": "Strategy Equity",
+                "width": 12,
+                "height": 4,
+                "row": 1,
+                "column": 1,
+                "sort": 11
+            },
+            {
+                "chartName": "Benchmark",
+                "width": 12,
+                "height": 4,
+                "row": 5,
+                "column": 1,
+                "sort": 51
+            }
+        ],
+        "sm": [
+            {
+                "chartName": "Strategy Equity",
+                "width": 12,
+                "height": 6,
+                "row": 1,
+                "column": 1,
+                "sort": 11
+            },
+            {
+                "chartName": "Portfolio Margin",
+                "width": 12,
+                "height": 4,
+                "row": 7,
+                "column": 1,
+                "sort": 71
+            },
+            {
+                "chartName": "Assets Sales Volume",
+                "width": 12,
+                "height": 4,
+                "row": 11,
+                "column": 1,
+                "sort": 111
+            },
+            {
+                "chartName": "Drawdown",
+                "width": 6,
+                "height": 5,
+                "row": 15,
+                "column": 1,
+                "sort": 151
+            },
+            {
+                "chartName": "Benchmark",
+                "width": 12,
+                "height": 4,
+                "row": 20,
+                "column": 1,
+                "sort": 201
+            },
+            {
+                "chartName": "Exposure",
+                "width": 6,
+                "height": 4,
+                "row": 24,
+                "column": 1,
+                "sort": 241
+            }
+        ]
+    }
 }

@@ -1,7 +1,11 @@
 {
     "cloud-id": 20216898,
     "algorithm-language": "Python",
-    "parameters": {},
+    "parameters": {
+        "days_to_expiry": "30",
+        "otm_threshold": "0.05",
+        "position_fraction": "0.2"
+    },
     "description": "Exemple simple d'une strat\u00e9gie consistant \u00e0 acheter et vendre des options en r\u00e9coltant le premium quand les options ne sont pas exerc\u00e9es et en inversant la strat\u00e9gie quand elles le sont.",
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
     "python-venv": 1,

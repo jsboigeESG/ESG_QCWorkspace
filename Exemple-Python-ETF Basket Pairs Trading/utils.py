@@ -46,3 +46,4 @@ and implement HandleCorporateActions. E.g.:
 
 where WarmUpIndicator will call ResetAndWarmUp for each indicator/consolidator pair
 '''
+

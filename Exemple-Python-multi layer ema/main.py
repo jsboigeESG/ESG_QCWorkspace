@@ -85,3 +85,4 @@ class TechnicalIndicatorsAlgorithm(QCAlgorithm):
             #        indicators["entry_price"] = None
             #        indicators["stop_price"] = None
 
+

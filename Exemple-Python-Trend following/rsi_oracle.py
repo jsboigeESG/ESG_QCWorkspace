@@ -20,3 +20,4 @@ def get_rsi_sell_cover(price_trend, rsi_trend):
             return 2
     return 0
 
+

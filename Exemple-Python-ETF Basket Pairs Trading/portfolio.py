@@ -107,3 +107,4 @@ class CointegratedVectorPortfolioConstructionModel(EqualWeightingPortfolioConstr
         return pd.Series(
             data = [x.value for x in security['window']],
             index = [x.end_time for x in security['window']])[::-1]
+

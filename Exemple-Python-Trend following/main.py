@@ -16,7 +16,7 @@ class CompetitionAlgorithm(QCAlgorithm):
         self.SetCash(1000000)
         self.SetWarmUp(10)
 
-        # Parameters:
+        # Parameters: 
         self.final_universe_size = 600
 
         # Universe selection
@@ -56,26 +56,4 @@ class CompetitionAlgorithm(QCAlgorithm):
         def CreateTargets(self, algorithm, insights): 
             targets = super().CreateTargets(algorithm, insights) 
             return [PortfolioTarget(x.Symbol, x.Quantity * 1.85) for x in targets]
-        
-
-
-
-        
-        
-
-
-
-    
-
-
-
-
-
-
-
-
-            
-
-            
-
-     
+ 

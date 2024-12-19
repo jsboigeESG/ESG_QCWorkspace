@@ -13,3 +13,4 @@ class SectorETFUniverseSelectionModel(ETFConstituentsUniverseSelectionModel):
         selected = sorted([c for c in constituents if c.weight], 
                           key=lambda c: c.weight, reverse=True)
         return [c.symbol for c in selected[:10]]
+

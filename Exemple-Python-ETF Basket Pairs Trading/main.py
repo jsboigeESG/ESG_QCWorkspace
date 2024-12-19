@@ -40,3 +40,4 @@ class ETFPairsTrading(QCAlgorithm):
     def on_data(self, slice):
         if slice.splits or slice.dividends:
             self.pcm.handle_corporate_actions(self, slice)
+

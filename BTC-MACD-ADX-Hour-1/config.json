@@ -1,0 +1,97 @@
+{
+    "algorithm-language": "CSharp",
+    "parameters": {
+        "macd-fast": "8",
+        "macd-slow": "16",
+        "macd-signal": "12",
+        "adx-period": "25",
+        "adx-high": "22",
+        "adx-low": "8",
+        "adx-window": "140",
+        "adx-lower-percentile": "6",
+        "adx-upper-percentile": "86"
+    },
+    "description": "Example of a simple algorithm based on 2 technical indicators, the MACD and the ADX",
+    "cloud-id": 20423659,
+    "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
+    "python-venv": 1,
+    "encrypted": false,
+    "deployment-target": "Local Platform",
+    "local-id": 482544703,
+    "backtestGrid": {
+        "xl": [
+            {
+                "chartName": "Strategy Equity",
+                "width": 9,
+                "height": 4,
+                "row": 1,
+                "column": 1,
+                "sort": 11
+            },
+            {
+                "chartName": "Assets Sales Volume",
+                "width": 3,
+                "height": 5,
+                "row": 1,
+                "column": 10,
+                "sort": 20
+            },
+            {
+                "chartName": "Portfolio Margin",
+                "width": 9,
+                "height": 3,
+                "row": 5,
+                "column": 1,
+                "sort": 51
+            },
+            {
+                "chartName": "Portfolio Turnover",
+                "width": 3,
+                "height": 2,
+                "row": 6,
+                "column": 10,
+                "sort": 70
+            },
+            {
+                "chartName": "Drawdown",
+                "width": 4,
+                "height": 2,
+                "row": 8,
+                "column": 1,
+                "sort": 81
+            },
+            {
+                "chartName": "Capacity",
+                "width": 4,
+                "height": 2,
+                "row": 8,
+                "column": 5,
+                "sort": 85
+            },
+            {
+                "chartName": "Exposure",
+                "width": 4,
+                "height": 2,
+                "row": 8,
+                "column": 9,
+                "sort": 89
+            },
+            {
+                "chartName": "Trade Plot",
+                "width": 12,
+                "height": 4,
+                "row": 10,
+                "column": 1,
+                "sort": 101
+            },
+            {
+                "chartName": "Benchmark",
+                "width": 12,
+                "height": 4,
+                "row": 14,
+                "column": 1,
+                "sort": 141
+            }
+        ]
+    }
+}

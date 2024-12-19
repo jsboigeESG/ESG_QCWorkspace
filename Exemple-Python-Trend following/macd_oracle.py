@@ -33,3 +33,4 @@ def get_macd_score(macd_rolling, trend, macd_params):
 
 
 
+

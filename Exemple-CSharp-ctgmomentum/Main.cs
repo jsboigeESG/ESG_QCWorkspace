@@ -278,3 +278,4 @@ namespace QuantConnect.Algorithm.CSharp
         }
     }
 }
+

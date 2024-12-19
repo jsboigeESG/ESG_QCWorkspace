@@ -63,7 +63,7 @@ namespace QuantConnect.Algorithm.CSharp
     /// <summary>
     /// Algorithme de trading pour BTCUSDT utilisant les indicateurs MACD et ADX.
     /// </summary>
-    public class BtcMacdAdxDaily1Algorithm : QCAlgorithm
+    public class BtcMacdAdxDaily1Algorithm2 : QCAlgorithm
     {
 
         //L'attribut Parameter permet de définir les paramètres dans le fichier de configuration, et d'utiliser une optimisation
@@ -87,19 +87,6 @@ namespace QuantConnect.Algorithm.CSharp
 
         [Parameter("adx-low")]
         public int AdxLow = 15;
-
-        // Fenêtre de stockage pour l'indicateur ADX
-
-        [Parameter("adx-window")]
-        public int AdxWindowPeriod = 140;
-
-        [Parameter("adx-lower-percentile")]
-        public int AdxLowerPercentile = 6;
-
-        [Parameter("adx-upper-percentile")]
-        public int AdxUpperPercentile = 86;
-
-        private RollingWindow<decimal> _adxWindow;
 
         // Symbole à trader (BTCUSDT)
         private Symbol _symbol;
@@ -140,7 +127,7 @@ namespace QuantConnect.Algorithm.CSharp
             this.SetBenchmark(_symbol);
 
             // Configuration de la période de chauffe (1 an de données)
-            SetWarmUp(TimeSpan.FromDays(500));
+            SetWarmUp(TimeSpan.FromDays(365));
             //var security = AddEquity(_ticker, Resolution.Daily);
 
             // Initialisation des indicateurs techniques
@@ -154,7 +141,6 @@ namespace QuantConnect.Algorithm.CSharp
                 Field.Close);
 
             _adx = ADX(_symbol, AdxPeriod, Resolution.Daily);
-             _adxWindow = new RollingWindow<decimal>(AdxWindowPeriod);
 
             // Configuration des graphiques pour visualiser les données
             // InitializeCharts();
@@ -225,11 +211,6 @@ namespace QuantConnect.Algorithm.CSharp
             if (!data.ContainsKey(_symbol))
                 return;
 
-            _adxWindow.Add(_adx.Current.Value);
-            if (!_adxWindow.IsReady) return;
-
-           
-
             // Récupération des informations actuelles
             var holdings = Portfolio[_symbol].Quantity;   // Quantité détenue
             var currentPrice = data[_symbol].Close;       // Prix de clôture actuel
@@ -243,10 +224,9 @@ namespace QuantConnect.Algorithm.CSharp
 
             // Récupération de la valeur actuelle de l'ADX
             var adxValue = _adx.Current.Value;
-             var (medianAdx, q1Adx, q3Adx) = ComputeAdxPercentiles(_adxWindow);
 
             // Conditions d'entrée en position longue
-            if (adxValue >= q3Adx  && isMacdBullish)
+            if (adxValue >= AdxHigh && isMacdBullish)
             {
                 // Si le portefeuille n'est pas déjà investi
                 if (!Portfolio.Invested)
@@ -257,7 +237,7 @@ namespace QuantConnect.Algorithm.CSharp
                 }
             }
             // Conditions de sortie de position
-            else if (adxValue < q1Adx && isMacdBearish)
+            else if (adxValue < AdxLow && isMacdBearish)
             {
                 // Si le portefeuille est investi
                 if (Portfolio.Invested)
@@ -268,26 +248,6 @@ namespace QuantConnect.Algorithm.CSharp
                 }
             }
         }
-
-
-        public (decimal median, decimal lowerPercentil, decimal upperPercentil) ComputeAdxPercentiles(RollingWindow<decimal> window)
-        {
-            var sorted = window.OrderBy(x => x).ToList();
-            int count = sorted.Count;
-            if (count == 0) return (0, 0, 0);
-
-            decimal median = sorted[count / 2];
-
-            // On s'assure que les percentiles sont dans [0, 100]
-            int lowerIndex = Math.Max(0, Math.Min(count - 1, count * AdxLowerPercentile / 100));
-            int upperIndex = Math.Max(0, Math.Min(count - 1, count * AdxUpperPercentile / 100));
-
-            decimal lowerPercentil = sorted[lowerIndex];
-            decimal upperPercentil = sorted[upperIndex];
-
-            return (median, lowerPercentil, upperPercentil);
-        }
-
 
 
         /// <summary>

@@ -417,3 +417,4 @@ class custom_alpha(AlphaModel):
                 self.obvs_rolling[x.Symbol].Add(self.obvs[x.Symbol].Current.Value)
 
                 self.ATRS[x.Symbol].Update(bar)
+

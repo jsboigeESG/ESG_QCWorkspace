@@ -168,3 +168,5 @@ def get_trend(close_data, order, K):
                            
 
 
+
+

@@ -68,3 +68,4 @@ def get_bollinger_buy_and_short(QCalgo, bollinger_rolling_window,trend, bollinge
 
 
 
+
