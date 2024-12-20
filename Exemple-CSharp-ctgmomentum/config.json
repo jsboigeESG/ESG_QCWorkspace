@@ -2,7 +2,7 @@
     "cloud-id": 19225388,
     "algorithm-language": "CSharp",
     "parameters": {},
-    "description": "Exemple complexe d'une stratégie sélectionnant des actions sur une base de calcul de momentum",
+    "description": "Exemple complexe d'une strat\u00e9gie s\u00e9lectionnant des actions sur une base de calcul de momentum",
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
     "python-venv": 1,
     "encrypted": false,
