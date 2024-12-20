@@ -102,6 +102,7 @@ namespace QuantConnect
         /// </summary>
         public override void Initialize()
         {
+            
             // Initialisation de la période du backtest
             InitPeriod();
 
@@ -186,7 +187,7 @@ namespace QuantConnect
                 message += $" Valeur totale du portefeuille : {Portfolio.TotalPortfolioValue:N2} USDT.";
 
                 // Enregistrement dans le journal
-                Log(message);
+                Debug(message);
             }
         }
 
@@ -271,6 +272,7 @@ namespace QuantConnect
         }
     }
 }
+
 
 
 

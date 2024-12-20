@@ -6,17 +6,18 @@ class WheelStrategyAlgorithm(QCAlgorithm):
 
     def Initialize(self):
         # Configuration initiale de l'algorithme
-        self.SetStartDate(2020, 6, 1)      # Date de début du backtest
-        self.SetCash(1_000_000)           # Montant initial pour le backtest
-        
-        # Gestion de la résolution en mode live ou backtest
-        self.backtest_resolution = Resolution.Minute
+
+        self.backtest_resolution =  Resolution.Minute
+
+        # Déterminer si nous sommes en mode live ou backtest
         self.is_live = self.LiveMode
+        # Choisir une résolution basée sur le mode
         resolution = Resolution.Minute if self.is_live else self.backtest_resolution
+
         self.Debug(f"Mode {'Live' if self.is_live else 'Backtest'}, résolution : {resolution}")
-        
-        # Configurer Interactive Brokers comme brokerage
-        self.SetBrokerageModel(BrokerageName.INTERACTIVE_BROKERS_BROKERAGE, AccountType.Cash)
+
+         # Configurer Interactive Brokers comme brokerage
+        self.SetBrokerageModel(BrokerageName.INTERACTIVE_BROKERS_BROKERAGE, AccountType.MARGIN)
         
         # Définir des propriétés par défaut pour les ordres
         self.DefaultOrderProperties = InteractiveBrokersOrderProperties()
@@ -31,7 +32,7 @@ class WheelStrategyAlgorithm(QCAlgorithm):
             )
         )
         
-        # Ajouter l'actif sous-jacent SPY (S&P 500 ETF)
+        # Ajouter l'actif sous-jacent SPY (S&P 500 ETF) avec la résolution sélectionnée
         self._equity = self.AddEquity(
             "SPY",
             resolution=resolution,
@@ -41,13 +42,15 @@ class WheelStrategyAlgorithm(QCAlgorithm):
         # Définir le benchmark comme étant le SPY (S&P 500 ETF)
         self.SetBenchmark("SPY")
 
-        # Paramètres optimisables
+
+        self.SetStartDate(2020, 6, 1)      # Date de début du backtest
+        self.SetCash(1_000_000)           # Montant initial pour le backtest
+        
+        # Paramètres optimisables : Permet de tester différents scénarios dans QC
         self.days_to_expiry = int(self.GetParameter("days_to_expiry", 30))  # Nombre de jours avant expiration des options
         self.otm_threshold = float(self.GetParameter("otm_threshold", 0.05))  # Pourcentage en dehors de la monnaie (OTM)
+        self.position_fraction = float(self.GetParameter("position_fraction", 0.2))  # Fraction du portefeuille à engager dans chaque position
 
-        # Contrôle du buying power
-        self.max_exposure_fraction = float(self.GetParameter("max_exposure_fraction", 1.0))  # Exposition max du portefeuille
-        self.disable_margin = bool(self.GetParameter("disable_margin", 1))  # Forcer des positions cash-secured
 
     def _get_target_contract(self, right, target_price):
         """
@@ -60,61 +63,41 @@ class WheelStrategyAlgorithm(QCAlgorithm):
         Returns:
             Symbol du contrat sélectionné ou None si aucun contrat éligible
         """
+        # Liste des contrats disponibles pour l'actif
         contract_symbols = self.OptionChainProvider.GetOptionContractList(self._equity.Symbol, self.Time)
         if not contract_symbols:
             self.Debug(f"Aucun contrat disponible pour {self._equity.Symbol} à {self.Time}.")
             return None
 
+        # Filtrer les expirations disponibles (>= `days_to_expiry`)
         future_dates = [s.ID.Date for s in contract_symbols if s.ID.Date.date() > self.Time.date() + timedelta(self.days_to_expiry)]
         if not future_dates:
             self.Debug("Aucune expiration disponible au-delà de la période demandée.")
             return None
         
-        expiry = min(future_dates)
-        filtered_symbols = (
-            [s for s in contract_symbols if s.ID.Date == expiry and s.ID.OptionRight == right and 
-             (s.ID.StrikePrice <= target_price if right == OptionRight.PUT else s.ID.StrikePrice >= target_price)]
-        )
-        filtered_symbols = sorted(filtered_symbols, key=lambda s: s.ID.StrikePrice, reverse=(right == OptionRight.PUT))
+        expiry = min(future_dates)  # Prochaine date d'expiration disponible
+
+        # Filtrer les contrats en fonction du type et du prix cible
+        if right == OptionRight.PUT:
+            # PUT : Strike <= target_price
+            filtered_symbols = [s for s in contract_symbols if s.ID.Date == expiry and s.ID.OptionRight == OptionRight.PUT and s.ID.StrikePrice <= target_price]
+            filtered_symbols = sorted(filtered_symbols, key=lambda s: s.ID.StrikePrice, reverse=True)
+        else:
+            # CALL : Strike >= target_price
+            filtered_symbols = [s for s in contract_symbols if s.ID.Date == expiry and s.ID.OptionRight == OptionRight.CALL and s.ID.StrikePrice >= target_price]
+            filtered_symbols = sorted(filtered_symbols, key=lambda s: s.ID.StrikePrice, reverse=False)
 
         if not filtered_symbols:
             self.Debug(f"Aucun contrat trouvé pour {right} autour de {target_price:.2f} avec expiration {expiry}.")
             return None
 
+        # Sélectionner le contrat avec le strike le plus proche
         symbol = filtered_symbols[0]
+
+        # Ajouter le contrat aux données suivies
         self.AddOptionContract(symbol)
+        self.Debug(f"Contrat sélectionné: {symbol.Value}, Right={right}, Strike={symbol.ID.StrikePrice}, Expiry={symbol.ID.Date}")
         return symbol
-
-    def _validate_order(self, required_exposure, order_type="PUT"):
-        """
-        Valider si le portefeuille peut supporter l'exposition requise pour un ordre.
-
-        Args:
-            required_exposure: Exposition totale requise pour l'ordre
-            order_type: Type d'ordre ("PUT" ou "CALL")
-
-        Returns:
-            bool: True si l'ordre est valide, False sinon
-        """
-        available_cash = self.Portfolio.MarginRemaining  # Liquidités après frais
-        total_exposure = sum(
-            abs(holding.Quantity) * holding.Price
-            for holding in self.Portfolio.Values if holding.Type == SecurityType.Option
-        )
-
-        # Vérification de liquidités pour cash-secured
-        if self.disable_margin and available_cash < required_exposure:
-            self.Debug(f"Ordre {order_type} refusé : Liquidités insuffisantes ({available_cash:.2f} disponibles, {required_exposure:.2f} requis).")
-            return False
-
-        # Vérification d'exposition maximale
-        new_exposure = total_exposure + required_exposure
-        if new_exposure > self.Portfolio.TotalPortfolioValue * self.max_exposure_fraction:
-            self.Debug(f"Ordre {order_type} refusé : Exposition maximale dépassée ({new_exposure:.2f} > {self.Portfolio.TotalPortfolioValue * self.max_exposure_fraction:.2f}).")
-            return False
-
-        return True
-
 
     def log_portfolio_state(self, action, symbol=None):
         """
@@ -134,31 +117,46 @@ class WheelStrategyAlgorithm(QCAlgorithm):
         if symbol:
             message += f", Instrument : {symbol.Value}"
         self.Debug(message)
-
+    
     def OnData(self, data):
         """
         Gestion des données de marché et logique de trading.
         """
+        # Si aucune position n'est ouverte, vendre un PUT
         if not self.Portfolio.Invested and self.IsMarketOpen(self._equity.Symbol):
-            put_target_price = self._equity.Price * (1 - self.otm_threshold)
+            put_target_price = self._equity.Price * (1 - self.otm_threshold)  # Calcul du prix cible pour le PUT
             put_symbol = self._get_target_contract(OptionRight.PUT, put_target_price)
-            
+    
             if put_symbol is not None:
-                required_exposure = put_symbol.ID.StrikePrice * 100
+                # Log avant la vente de PUT
                 self.log_portfolio_state("Avant Vente PUT", put_symbol)
-                
-                if self._validate_order(required_exposure, "PUT"):
-                    quantity_to_sell = math.floor(self.Portfolio.Cash / required_exposure)  # Quantité ajustée au cash disponible
-                    self.MarketOrder(put_symbol, -quantity_to_sell)
-                    self.log_portfolio_state("Après Vente PUT", put_symbol)
-        
+    
+                # Vente d'un PUT avec une fraction du portefeuille
+                self.SetHoldings(put_symbol, -self.position_fraction)
+    
+                # Log après la vente de PUT
+                self.log_portfolio_state("Après Vente PUT", put_symbol)
+    
+        # Si des actions sous-jacentes sont détenues, vendre un CALL
         elif [self._equity.Symbol] == [symbol for symbol, holding in self.Portfolio.items() if holding.Invested]:
-            call_target_price = self._equity.Price * (1 + self.otm_threshold)
+            call_target_price = self._equity.Price * (1 + self.otm_threshold)  # Calcul du prix cible pour le CALL
             call_symbol = self._get_target_contract(OptionRight.CALL, call_target_price)
+    
             if call_symbol is not None:
-                quantity_to_cover = math.floor(self._equity.Holdings.Quantity / 100)
-                self.log_portfolio_state("Avant Vente CALL", call_symbol)
+                # Calculer le nombre de contrats nécessaires pour couvrir les actions détenues
+                quantity_to_cover = math.floor(self._equity.Holdings.Quantity / 100)  # Chaque contrat couvre 100 actions
                 if quantity_to_cover > 0:
+                    # Log avant la vente de CALL
+                    self.log_portfolio_state("Avant Vente CALL", call_symbol)
+    
                     self.MarketOrder(call_symbol, -quantity_to_cover)
+    
+                    # Log après la vente de CALL
                     self.log_portfolio_state("Après Vente CALL", call_symbol)
 
+
+        # Ajouts possibles :
+        # - Rachat de PUT en cas de conditions défavorables
+        # - Imposition d'une prime minimale pour les options sélectionnées
+        # - Utilisation de stop de protection en cas de possession du sous-jacent
+        
