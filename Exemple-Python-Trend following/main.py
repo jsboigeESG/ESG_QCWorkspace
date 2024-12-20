@@ -16,6 +16,12 @@ class CompetitionAlgorithm(QCAlgorithm):
         self.SetCash(1000000)
         self.SetWarmUp(10)
 
+        # Ajouter SPY comme actif pour le benchmark
+        self.spy = self.AddEquity("SPY", Resolution.Hour).Symbol
+
+        # Définir SPY comme benchmark
+        self.SetBenchmark(self.spy)
+
         # Parameters: 
         self.final_universe_size = 600
 
@@ -57,3 +63,4 @@ class CompetitionAlgorithm(QCAlgorithm):
             targets = super().CreateTargets(algorithm, insights) 
             return [PortfolioTarget(x.Symbol, x.Quantity * 1.85) for x in targets]
  
+
