@@ -7,7 +7,7 @@
         "position_fraction": "0.2",
         "max_exposure_fraction": "1"
     },
-    "description": "Exemple simple d'une strat\u00e9gie consistant \u00e0 acheter et vendre des options en r\u00e9coltant le premium quand les options ne sont pas exerc\u00e9es et en inversant la strat\u00e9gie quand elles le sont.",
+    "description": "Exemple simple d'une stratégie consistant à acheter et vendre des options en récoltant le premium quand les options ne sont pas exercées et en inversant la stratégie quand elles le sont.",
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
     "python-venv": 1,
     "encrypted": false,
