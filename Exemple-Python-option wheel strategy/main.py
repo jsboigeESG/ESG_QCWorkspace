@@ -1,6 +1,7 @@
-# Importer les dépendances nécessaires
+# region imports
 from AlgorithmImports import *
-import math
+# endregion
+
 
 class WheelStrategyAlgorithm(QCAlgorithm):
 
@@ -161,4 +162,5 @@ class WheelStrategyAlgorithm(QCAlgorithm):
                 if quantity_to_cover > 0:
                     self.MarketOrder(call_symbol, -quantity_to_cover)
                     self.log_portfolio_state("Après Vente CALL", call_symbol)
+
 

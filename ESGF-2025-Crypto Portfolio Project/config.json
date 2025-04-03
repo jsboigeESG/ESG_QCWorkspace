@@ -1,0 +1,12 @@
+{
+    "cloud-id": 21223317,
+    "algorithm-language": "Python",
+    "parameters": {
+        "days_to_expiry": "30",
+        "otm_threshold": "0.05",
+        "position_fraction": "0.2"
+    },
+    "description": "Exemple d'algo sur du BTC/ETH",
+    "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
+    "python-venv": 1
+}

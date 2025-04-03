@@ -2,48 +2,51 @@
 from AlgorithmImports import *
 #endregion
 
-def reset_and_warm_up(algorithm, security, resolution, lookback = None):
-    indicator = security['logr']
-    consolidator = security['consolidator']
+def reset_and_warm_up(algorithm, data_dict, resolution, lookback=None):
+    """
+    Réinitialise l'indicateur 'logr' et lui injecte de l'historique 
+    pour démarrer avec un RollingWindow déjà rempli.
+
+    Args:
+        algorithm: instance QCAlgorithm
+        data_dict: dict contenant "symbol", "logr", "consolidator"
+        resolution: resolution des barres (ex: Resolution.Hourly)
+        lookback: nombre de barres historiques à récupérer (défaut: WarmUpPeriod de l'indicateur)
+    """
+    indicator = data_dict["logr"]
+    consolidator = data_dict["consolidator"]
+    symbol = data_dict["symbol"]
 
     if not lookback:
-        lookback = indicator.warm_up_period
+        lookback = indicator.WarmUpPeriod
 
-    # historical request to update the consolidator that will warm up the indicator
-    history = algorithm.history[consolidator.input_type](security.symbol, lookback, resolution,
-        data_normalization_mode = DataNormalizationMode.SCALED_RAW)
+    # Récupérer l'historique sous forme de liste
+    # On reste en DataNormalizationMode.Raw, c'est OK.
+    bars = list(algorithm.History[TradeBar](
+        symbol, 
+        lookback, 
+        resolution,
+        dataNormalizationMode=DataNormalizationMode.Raw
+    ))
 
-    indicator.reset()
-    
-    # Replace the consolidator, since we cannot reset it
-    # Not ideal since we don't the consolidator type and period
-    algorithm.subscription_manager.remove_consolidator(security.symbol, consolidator)
-    consolidator = TradeBarConsolidator(timedelta(1))
-    algorithm.register_indicator(security.symbol, indicator, consolidator)
-    
-    for bar in list(history)[:-1]:
-        consolidator.update(bar)
+    if len(bars) == 0:
+        algorithm.Log(f"No history for {symbol}.")
+        return consolidator  # On ne fait rien de plus
 
-    return consolidator
+    # Reset de l'indicateur
+    indicator.Reset()
 
-'''
-# In main.py, OnData and call HandleCorporateActions for framework models (if necessary)
-    def on_data(self, slice):
-        if slice.splits or slice.dividends:
-            self.alpha.handle_corporate_actions(self, slice)
-            self.pcm.handle_corporate_actions(self, slice)
-            self.risk.handle_corporate_actions(self, slice)
-            self.execution.handle_corporate_actions(self, slice)
+    # Retirer l'ancien consolidator
+    algorithm.SubscriptionManager.RemoveConsolidator(symbol, consolidator)
+    # En Hourly, on peut consolider via un TradeBarConsolidator(TimeSpan.FromHours(1)) 
+    # Mais celui-ci s'adapte automatiquement au 'resolution' s'il est déjà planifié.
+    new_cons = TradeBarConsolidator(timedelta(hours=1))
+    algorithm.RegisterIndicator(symbol, indicator, new_cons)
 
-# In the framework models, add
-from utils import ResetAndWarmUp
+    # "Replay" des barres historiques pour remplir l'indicateur
+    for bar in bars:
+        new_cons.Update(bar)
 
-and implement HandleCorporateActions. E.g.:
-    def handle_corporate_actions(self, algorithm, slice):
-        for security.symbol, data in self.security.symbol_data.items():
-            if slice.splits.contains_key(security.symbol) or slice.dividends.contains_key(security.symbol):
-                data.warm_up_indicator()
-
-where WarmUpIndicator will call ResetAndWarmUp for each indicator/consolidator pair
-'''
+    data_dict["consolidator"] = new_cons
+    return new_cons
 

@@ -130,6 +130,7 @@ namespace QuantConnect
             _fastEma = EMA(_btcUsdSymbol, FastPeriod, _resolution);
             _slowEma = EMA(_btcUsdSymbol, SlowPeriod, _resolution);
 
+            this.SetBenchmark(_btcUsdSymbol);
             // Initialisation des graphiques
             InitializeCharts();
         }
@@ -267,11 +268,12 @@ namespace QuantConnect
             // SetEndDate(2023, 10, 20); // fin backtest 29688
 
             SetStartDate(2021, 10, 16); 
-            SetEndDate(2024, 11, 27);
+            // SetEndDate(2025, 03, 27);
 
         }
     }
 }
+
 
 
 

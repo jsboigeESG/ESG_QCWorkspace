@@ -2,11 +2,14 @@
     "cloud-id": 20216947,
     "algorithm-language": "Python",
     "parameters": {
-        "allocation_denominator": "1"
+        "allocation_denominator": "1",
+        "fastPeriod": "10",
+        "slowPeriod": "50"
     },
-    "description": "Exemple simple d'une strat\u00e9gie Python utilisant des moyennes mobiles exponentielles empil\u00e9es",
+    "description": "Exemple simple d'une stratégie Python utilisant des moyennes mobiles exponentielles empilées",
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
     "python-venv": 1,
     "encrypted": false,
-    "local-id": 416239741
+    "local-id": 416239741,
+    "deployment-target": "Local Platform"
 }

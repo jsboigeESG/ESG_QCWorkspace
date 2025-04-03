@@ -1,0 +1,14 @@
+{
+    "cloud-id": 20931062,
+    "algorithm-language": "Python",
+    "parameters": {
+        "ema-fast": "15",
+        "ema-slow": "30",
+        "ema-upcross-margin": "1.005",
+        "ema-downcross-margin": "0.995"
+    },
+    "description": "Report",
+    "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
+    "python-venv": 1,
+    "encrypted": false
+}

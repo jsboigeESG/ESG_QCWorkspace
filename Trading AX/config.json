@@ -1,0 +1,9 @@
+{
+    "cloud-id": 20931882,
+    "algorithm-language": "Python",
+    "parameters": {},
+    "description": "Exemple d'un algorithme complexe, actuellement en tête de la league QuantConnect",
+    "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
+    "python-venv": 1,
+    "encrypted": false
+}

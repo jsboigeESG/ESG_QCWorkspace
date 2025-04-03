@@ -1,0 +1,11 @@
+{
+    "cloud-id": 21073730,
+    "algorithm-language": "Python",
+    "parameters": {
+        "allocation_denominator": "1"
+    },
+    "description": "",
+    "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
+    "python-venv": 1,
+    "encrypted": false
+}

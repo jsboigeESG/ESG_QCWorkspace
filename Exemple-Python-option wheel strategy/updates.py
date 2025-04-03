@@ -107,3 +107,4 @@ class WheelStrategyAlgorithm(QCAlgorithm):
         # - Rachat de PUT en cas de conditions défavorables
         # - Utilisation de stop de protection en cas de possession du sous-jacent
         # - Imposition d'une prime minimale pour les options sélectionnées
+
