@@ -6,7 +6,7 @@
         "fastPeriod": "10",
         "slowPeriod": "50"
     },
-    "description": "Exemple simple d'une stratégie Python utilisant des moyennes mobiles exponentielles empilées",
+    "description": "Exemple simple d'une strat\u00e9gie Python utilisant des moyennes mobiles exponentielles empil\u00e9es",
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
     "python-venv": 1,
     "encrypted": false,

@@ -8,5 +8,6 @@
     },
     "description": "Exemple d'algo sur du BTC/ETH",
     "organization-id": "94aa4bcb45ff1d1ef286d93817104cce",
-    "python-venv": 1
+    "python-venv": 1,
+    "encrypted": false
 }
